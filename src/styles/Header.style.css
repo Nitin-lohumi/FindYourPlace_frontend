@@ -1,0 +1,10 @@
+.shadowDark {
+  box-shadow: 2px 1px 3px rgb(252, 248, 248);
+}
+
+.bg {
+  background: linear-gradient(to right, #363b4c, #131723, #0d111c);
+}
+.shadow-light {
+  box-shadow: 1px 2px 2px rgb(182, 177, 177);
+}

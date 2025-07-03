@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "tailwindcss";
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+:root[class~="dark"] {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+.backgroundColor {
+  background: linear-gradient(to right, #0d111c, rgb(52, 63, 88), #0d111c);
+}
+.textShadow-lg {
+  text-shadow: 3px 1px 2px rgb(240, 236, 236);
+}
+.textShadow-sm {
+  text-shadow: 1px 1px 1px rgb(4, 118, 99);
+}
+.shadowcard {
+  box-shadow: 2px 2px 3px rgb(123, 121, 121);
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+.shadow-max {
+  filter: drop-shadow(0 0 4px rgba(74, 127, 127, 0.6));
+}
