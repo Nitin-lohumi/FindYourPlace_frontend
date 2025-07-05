@@ -3,7 +3,7 @@ function page() {
   return (
     <>
       <div className="">
-        <ScreenBody />
+        {/* <ScreenBody /> */}
       </div>
     </>
   );

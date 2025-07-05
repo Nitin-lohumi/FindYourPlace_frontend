@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import DropDown from "./DropDown";
 import "../styles/Header.style.css";
+import Link from "next/link";
 function Header() {
   const [textSearch, setSearchText] = useState("");
   const [scale, setScale] = useState(false);
@@ -73,7 +74,9 @@ function Header() {
                 transition={{ duration: 0.2 }}
                 className="border text-blue-400 rounded-xl cursor-pointer flex flex-row items-center pl-1 pr-1 font-bold m-0 gap-2"
               >
-                <span>Search</span> <FaSearch />
+                <Link href={`/search?text=${textSearch}`} className="flex flex-row gap-2 items-center">
+                  <span>Search</span> <FaSearch />
+                </Link>
               </motion.button>
             )}
           </motion.div>

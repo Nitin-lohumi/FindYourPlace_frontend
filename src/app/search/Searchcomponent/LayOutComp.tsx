@@ -1,25 +1,35 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import {
+  setHasPhoneNumber,
+  setOpenNowPlaces,
+  setSelectedOptions,
+  setSort,
+  settypeSelectedOptions,
+} from "@/store/Slices/FilterSlice";
 function LayOutComp() {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [typeSelectOptions, settypeSelectedOptions] = useState<string[]>([]);
-  const [openNowPlaces, setOpenNowPlaces] = useState(false);
-  const [priceLevel, setPriceLevel] = useState("$$");
+  const dispatch = useDispatch();
+  const { selectedOptions, typeSelectOptions, openNowPlaces, hasphnNo, sort } =
+    useSelector((state: RootState) => state.Filters);
+  console.log(
+    selectedOptions,
+    typeSelectOptions,
+    openNowPlaces,
+    hasphnNo,
+    sort
+  );
   const option = ["4 star & above", "3 stars", "2stars"];
-  const typesSelect = ["Restaurant", "Cafe", "Museum", "Store", "Park"];
-  const [hasphoto, setHasPhoto] = useState("no");
-  const [sort, setSort] = useState("");
+  const typesSelect = ["restaurant", "cafe", "museum", "store", "park"];
   function handleChange(e: any) {
     const value = e.target.value;
-    setSelectedOptions((prev) =>
-      prev.includes(value)
-        ? prev.filter((option) => option !== value)
-        : [...prev, value]
-    );
+    dispatch(setSelectedOptions(value));
   }
+  useEffect(() => {}, []);
   return (
     <motion.div className="">
       <motion.h1
@@ -33,26 +43,30 @@ function LayOutComp() {
       <hr className="border-gray-600 border-0.2" />
       <motion.div className="pl-2 border-white pb-2">
         <h3 className="font-bold text-gray-300 pt-2 pb-2"> Sort Options</h3>
-        <RadioGroup value={sort} onValueChange={setSort} className="">
+        <RadioGroup
+          value={sort}
+          onValueChange={(val) => dispatch(setSort(val))}
+          className=""
+        >
           <div className="flex items-center space-x-2">
             <RadioGroupItem
-              value="Rating High → Low"
+              value="Sort In accending"
               id="Rating"
               color="green"
               className="w-4 h-4 rounded-full border border-gray-400 data-[state=checked]:bg-blue-600"
             />
             <Label htmlFor="Rating" className="text-gray-400">
-              Rating High → Low
+              Sort In accending
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem
-              value="Distance Near → Far"
+              value="Sort In descending"
               id="Distance"
               className="w-4 h-4 rounded-full border border-gray-400 data-[state=checked]:bg-blue-600"
             />
             <Label htmlFor="Distance" className="text-gray-400">
-              Distance Near → Far
+              Sort In descending
             </Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -78,7 +92,7 @@ function LayOutComp() {
           <input
             type="checkbox"
             checked={openNowPlaces}
-            onChange={() => setOpenNowPlaces((prev) => !prev)}
+            onChange={() => dispatch(setOpenNowPlaces())}
             className=" cursor-pointer w-10 h-5 rounded-full bg-gray-700 checked:bg-green-500 appearance-none relative
     before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-4 before:h-4 before:bg-white
     before:rounded-full before:transition-transform checked:before:translate-x-5"
@@ -121,11 +135,7 @@ function LayOutComp() {
                 value={v}
                 className="mr-2"
                 onChange={(e) =>
-                  settypeSelectedOptions((prev) =>
-                    prev.includes(v)
-                      ? prev.filter((t, i) => t != v)
-                      : [...prev, e.target.value]
-                  )
+                  dispatch(settypeSelectedOptions(e.target.value))
                 }
               />
               {v}
@@ -135,61 +145,16 @@ function LayOutComp() {
       </motion.div>
       {/* *****************************/}
       <hr className="border-gray-600 border-0.2" />
-
-      <motion.div className="border-white mb-3 pt-2 pl-2">
-        <h2 className="text-gray-400 font-bold mb-2">Budget</h2>
-        <RadioGroup value={priceLevel} onValueChange={setPriceLevel}>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="cheap"
-              id="cheap"
-              className="w-4 h-4 rounded-full border border-gray-400 data-[state=checked]:bg-blue-600"
-            />
-            <Label htmlFor="cheap" className="text-gray-400">
-              ₹ Cheap
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="moderate"
-              id="moderate"
-              className="w-4 h-4 rounded-full border border-gray-400 data-[state=checked]:bg-blue-600"
-            />
-            <Label htmlFor="moderate" className="text-gray-400">
-              ₹₹ Moderate
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="expensive"
-              id="expensive"
-              className="w-4 h-4 rounded-full border border-gray-400 data-[state=checked]:bg-blue-600"
-            />
-            <Label htmlFor="expensive" className="text-gray-400">
-              ₹₹₹ Expensive
-            </Label>
-          </div>
-        </RadioGroup>
-      </motion.div>
-      {/* ********************* */}
-      <hr className="border-gray-600 border-0.2" />
-
-      <motion.div className="pl-2 pb-2 pt-2 mb-4"> 
-        <h2 className="text-gray-400 font-bold"> Has Photo</h2>
+      <motion.div className="pl-2 pb-2 pt-2 mb-4">
+        <h2 className="text-gray-400 font-bold"> Phone Number</h2>
         <label className="text-gray-400">
           <input
             type="checkbox"
-            value={hasphoto}
+            value={hasphnNo}
             className="mr-2"
-            onChange={(e) =>
-              setHasPhoto((prev) =>
-                prev.includes("yes")
-                  ? prev.replace("yes", "no")
-                  : prev.replace("no", "yes")
-              )
-            }
+            onChange={() => dispatch(setHasPhoneNumber())}
           />
-          Has Photo of Place
+          Has Phone No.
         </label>
       </motion.div>
     </motion.div>

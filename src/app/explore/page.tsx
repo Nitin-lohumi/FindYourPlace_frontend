@@ -7,27 +7,32 @@ import { CiLocationArrow1 } from "react-icons/ci";
 import { IoIosCall } from "react-icons/io";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import axios from "axios";
 import Link from "next/link";
 import ReviewCard from "@/component/ReviewCard";
-import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import { useFetch } from "@/lib/fetchFunction";
+import { Skeleton } from "@/components/ui/skeleton";
+const fetchfnPlace = async (placeid: string) => {
+  const res = await axios.get(
+    `http://localhost:8000/api/placeDetails?placeid=${placeid}`
+  );
+  return res.data;
+};
 function Explore() {
+  const { ref: ref1, inView: view1 } = useInView();
   const searchParams = useSearchParams();
   const [address, setAddress] = useState("");
   const [showWeeks, setWeeks] = useState([]);
   const [showOpenbuttonAction, setopeneButtonAction] = useState(false);
   const [openMap, setOpenMap] = useState(false);
-  const Destination_location = useMemo(() => {
-    const raw = searchParams.get("location");
-    try {
-      return raw ? JSON.parse(raw) : null;
-    } catch (error) {
-      console.error("Invalid JSON in reviews:", error);
-      return null;
-    }
-  }, [searchParams]);
 
-  console.log(Destination_location);
-
+  const placeDetails = useFetch({
+    key: ["explorePlaceDetails", searchParams.get("placeid") || ""],
+    fn: () => fetchfnPlace(searchParams.get("placeid") || ""),
+    enable: view1,
+  });
+  console.log(placeDetails?.data?.data?.nationalPhoneNumber);
   const openinghours = useMemo(() => {
     const raw = searchParams.get("openingHours");
     try {
@@ -132,6 +137,7 @@ function Explore() {
                   </motion.span>
                 ))}
             </motion.div>
+
             <motion.div className="border-white">
               {address ? (
                 <motion.div className="text-center text-gray-300 md:font-bold text-2xl">
@@ -149,7 +155,7 @@ function Explore() {
                 ""
               )}
             </motion.div>
-
+            {/*  */}
             <motion.div
               className={`border-white pl-5 flex ${
                 openMap ? "flex-col" : "justify-center"
@@ -158,16 +164,8 @@ function Explore() {
               {openMap && (
                 <MapView
                   destination={{
-                    lat:
-                      Destination_location &&
-                      (Destination_location as any).latitude
-                        ? (Destination_location as any).latitude
-                        : "",
-                    long:
-                      Destination_location &&
-                      (Destination_location as any).longitude
-                        ? (Destination_location as any).longitude
-                        : "",
+                    lat: Number(searchParams.get("location_lat")),
+                    long: Number(searchParams.get("location_long")),
                   }}
                 />
               )}
@@ -256,7 +254,51 @@ function Explore() {
                   </motion.div>
                 </motion.div>
               </motion.div>
-              {/***************** */}
+              {/* **************************** */}
+              <motion.div className="pl-2 mt-10  mb-10" ref={ref1}>
+                {placeDetails.isLoading ? (
+                  <>
+                    <motion.div className="flex items-center mb-4 mt-3 gap-2">
+                      <Skeleton className="bg-gray-400 h-8 w-full" />
+                      <motion.div>
+                        <Skeleton className="bg-gray-400 h-8 w-full" />
+                      </motion.div>
+                    </motion.div>
+                    <motion.div className="flex items-center mt-3 mb-3 gap-2">
+                      <Skeleton className="bg-gray-400 h-8 w-full" />
+                      <motion.div>
+                        <Skeleton className="bg-gray-400 h-8 w-full" />
+                      </motion.div>
+                    </motion.div>
+                  </>
+                ) : placeDetails?.data ? (
+                  <motion.div>
+                    <motion.div className="flex items-center gap-2 mb-4 text-white">
+                      <p className="font-bold">National Phone Number</p>
+                      <motion.p>
+                        {placeDetails?.data?.data?.nationalPhoneNumber}
+                      </motion.p>
+                    </motion.div>
+                    <motion.div className="flex items-center gap-2  mb-4 text-white">
+                      <p className="text-white font-bold">
+                        international Phone Number
+                      </p>
+                      <motion.p className="text-white">
+                        {placeDetails?.data?.data?.internationalPhoneNumber}
+                      </motion.p>
+                    </motion.div>
+                    <motion.div className="flex items-center gap-2  mb-4 text-white">
+                      <p className="font-bold">formatted Address </p>
+                      <motion.p className="flex text-justify text-white ">
+                        {placeDetails?.data?.data?.formattedAddress}
+                      </motion.p>
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  ""
+                )}
+              </motion.div>
+              {/*****************************   */}
               <motion.div className="border-white pt-10 pb-10">
                 <h1 className="capitalize font-bold text-3xl text-center text-white">
                   Review's

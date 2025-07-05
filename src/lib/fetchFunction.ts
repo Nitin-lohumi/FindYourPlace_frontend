@@ -4,12 +4,12 @@ export const useFetch = ({
   fn,
   enable,
 }: {
-  key: string;
+  key: string[];
   fn: () => Promise<any>;
   enable: boolean;
 }) =>
   useQuery({
-    queryKey: [key],
+    queryKey: [...key],
     queryFn: fn,
     enabled: enable,
     staleTime: 1000 * 60 * 60 * 10,

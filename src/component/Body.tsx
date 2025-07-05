@@ -44,21 +44,20 @@ function ScreenBody() {
   const { ref: ref3, inView: view3 } = useInView();
   console.log(latitude, longitude);
   const tourist = useFetch({
-    key: "touristPlaces",
+    key: ["touristPlaces"],
     fn: () => fetchTouristData(latitude, longitude),
     enable: view1 && latitude !== null && longitude !== null,
   });
   const Hotel = useFetch({
-    key: "hotel",
+    key: ["hotel"],
     fn: () => fetchForHotel(latitude, longitude),
     enable: view2 && latitude !== null && longitude !== null,
   });
   const shopping = useFetch({
-    key: "Atm",
+    key: ["Atm"],
     fn: () => fetchShoppingData(latitude, longitude),
     enable: view3 && latitude !== null && longitude !== null,
   });
-  console.log(Hotel.data);
   return (
     <>
       <motion.div className="min-h-fit max-h-screen flex flex-col item-center">
