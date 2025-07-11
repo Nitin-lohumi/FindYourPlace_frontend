@@ -4,7 +4,6 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 function SavePlaceButton({ placeData }: { placeData: any }) {
   const search = useSearchParams();
@@ -63,7 +62,7 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
   });
   const handleSave = () => saveMutation.mutate();
   const handleRemove = () => removeMutation.mutate();
-  if (isSavedQuery.isLoading) return <p className="text-white">Loading...</p>;
+  if (isSavedQuery.isLoading) return <p className="text-white">**</p>;
   return (
     <>
       {!isSavedQuery.data ? (
