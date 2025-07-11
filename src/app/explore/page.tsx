@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "../../styles/explore.style.css";
 import { CiLocationArrow1 } from "react-icons/ci";
@@ -14,6 +14,7 @@ import { useInView } from "react-intersection-observer";
 // import { Skeleton } from "@/components/ui/skeleton";
 import SavePlaceButton from "@/component/SavePlaceButton";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // const fetchfnPlace = async (placeid: string) => {
 //   const res = await axios.get(
@@ -69,9 +70,9 @@ function Explore() {
   const handleMap = () => {
     setOpenMap((prev) => !prev);
   };
-  if(!placeData){
-    return <>loading.....</>
-  } 
+  if (!placeData) {
+    return <>loading.....</>;
+  }
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -103,7 +104,16 @@ function Explore() {
         >
           <header className="sticky top-0 z-20 backgroundColor flex justify-between text-white font-bold text-2xl pl-2 pt-2 pb-2">
             <h1>{placeData.displayName}</h1>
-            <SavePlaceButton placeData={placeData} />
+            <Suspense
+              fallback={
+                <Skeleton
+                  color="white"
+                  className=" bg-gray-800 h-[17px] w-[20px] rounded-2xl"
+                />
+              }
+            >
+              <SavePlaceButton placeData={placeData} />
+            </Suspense>
           </header>
 
           <motion.div className="flex justify-end pr-3 p-3">

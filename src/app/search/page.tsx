@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { useFetch } from "@/lib/fetchFunction";
 import { RootState } from "@/store/store";
 import axios from "axios";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import MyCard from "@/component/MyCard";
 import { useSession } from "next-auth/react";
@@ -44,7 +43,6 @@ function Page() {
   const [data, setData] = useState<PlaceType[]>([]);
   const searchtext = useSearchParams();
   const textQuery = searchtext.get("text");
-
   const searchData = useFetch({
     key: ["searchData", textQuery ?? ""],
     fn: () => fetch_SearchAPI(textQuery || ""),
