@@ -1,6 +1,5 @@
 import Header from "@/component/Header";
 import React from "react";
-import CheckTokenCookie from "@/component/CheckTokenCookie";
 import { getServerSession } from "next-auth";
 import { authOption } from "../api/auth/lib/authOption";
 import { redirect } from "next/navigation";
@@ -11,7 +10,6 @@ async function page() {
   }
   return (
     <>
-      <CheckTokenCookie />
       <div></div>
     </>
   );
