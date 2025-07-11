@@ -37,8 +37,8 @@ function Header() {
       className={`sticky top-0 z-[100] transition-all duration-300 bg`}
     >
       <motion.div className="shadowDark shadow-xl flex p-4 justify-between w-full items-center">
-        <motion.div className="w-full">
-          <motion.p className="capitalize font-bold text-white">Trips</motion.p>
+        <motion.div className={`md:w-full ${!scale&&"w-full"}`}>
+          <motion.p className="capitalize font-bold text-white md:text-xl text-xs">Your Places</motion.p>
         </motion.div>
 
         <motion.div
@@ -47,19 +47,20 @@ function Header() {
           } w-full items-center gap-3`}
         >
           <motion.div
-            className="relative cursor-pointer border rounded-xl shadowDark flex"
+            className="relative cursor-pointer rounded-xl shadowDark flex"
             onClick={handleSearch}
-            animate={{ x: scale ? -100 : 0, width: scale ? "100%" : "" }}
+            animate={{ x: scale ? -10 : 0, width: scale ? "100%" : "" }}
             transition={{ duration: 0.5 }}
           >
             <motion.input
+
               type="text"
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder={`${scale ? "Search for your move" : ""}`}
+              placeholder={`${scale ? "Search for Place" : ""}`}
               value={textSearch}
               className={`${
                 scale ? "w-full" : "w-0"
-              } border-none p-1 pl-8 outline-none text-white`}
+              } border-none p-1 md:pl-9 pl-8 md:text-xl text-sm outline-none text-white`}
               animate={{ width: scale ? "100%" : "0" }}
               transition={{ duration: 0.5 }}
             />
@@ -69,10 +70,10 @@ function Header() {
 
             {scale && textSearch.length >= 3 && (
               <motion.button
-                initial={{ opacity: 0.6, x: -10 }}
+                initial={{ opacity: 0.6, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.2 }}
-                className="border text-blue-400 rounded-xl cursor-pointer flex flex-row items-center pl-1 pr-1 font-bold m-0 gap-2"
+                transition={{ duration: 0.5 }}
+                className="text-blue-400 rounded-xl border border-white cursor-pointer flex flex-row items-center pl-1 pr-1 md:font-bold font-medium m-0 gap-2"
               >
                 <Link href={`/search?text=${textSearch}`} className="flex flex-row gap-2 items-center">
                   <span>Search</span> <FaSearch />

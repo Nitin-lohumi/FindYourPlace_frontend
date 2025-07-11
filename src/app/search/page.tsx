@@ -9,10 +9,12 @@ import axios from "axios";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import MyCard from "@/component/MyCard";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const fetch_SearchAPI = async (textQuery: string) => {
   const res = await axios.get(
-    `http://localhost:8000/api/searchBar?text=${textQuery}`
+    `http://localhost:8000/api/searchBar?text=${textQuery}`,
+    { withCredentials: true }
   );
   return res.data.data;
 };
@@ -35,6 +37,8 @@ type PlaceType = {
 };
 
 function Page() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const { hasphnNo, selectedOptions, typeSelectOptions, openNowPlaces, sort } =
     useSelector((state: RootState) => state.Filters);
   const [data, setData] = useState<PlaceType[]>([]);
@@ -65,24 +69,20 @@ function Page() {
       }
     }
 
-    // ⭐ Open Now filter
     if (openNowPlaces) {
       filtered = filtered.filter((v) => v.isOpen);
     }
 
-    // ⭐ Type filter
     if (typeSelectOptions.length > 0) {
       filtered = filtered.filter((v) =>
         typeSelectOptions.some((type: string) => v.types.includes(type))
       );
     }
 
-    // ⭐ Phone number filter (case fixed to `phone`)
     if (hasphnNo) {
       filtered = filtered.filter((v) => v.phone !== undefined);
     }
 
-    // ⭐ Sorting
     if (sort.length) {
       if (sort.includes("Sort In accending")) {
         filtered.sort((a, b) => a?.rating - b?.rating);
@@ -94,11 +94,9 @@ function Page() {
         );
       }
     }
-
-    console.log("Filtered result:", filtered);
     setData(filtered);
   }, [
-    JSON.stringify(searchData.data), // 💡 ensures deep check
+    JSON.stringify(searchData.data),
     selectedOptions,
     openNowPlaces,
     typeSelectOptions,
@@ -125,34 +123,16 @@ function Page() {
             </motion.div>
           ))
         : data.map((value, i) => (
-            <Link
-              key={i}
-              href={{
-                pathname: "/explore",
-                query: {
-                  placeid: value.id,
-                  types: value.types.join(","),
-                  displayName: value.displayName,
-                  address: value.address,
-                  location_lat: value.location.latitude,
-                  location_long: value.location.longitude,
-                  rating: value.rating,
-                  phone: value.phone,
-                  editorialSummary: value.editorialSummary,
-                  isOpen: value.isOpen,
-                  ...((value?.reviews && value.reviews.length > 0) && {
-                    reviews: JSON.stringify(value.reviews),
-                  }),
-                  mapUrl: value.mapUrl,
-                  openingHours: JSON.stringify(value.openingHours),
-                  addressDescriptor: value.addressDescriptor,
-                  originalPhoto: value.originalPhoto || "/dummyPlace.png",
-                },
+            <div
+              onClick={() => {
+                localStorage.setItem("selectedPlace", JSON.stringify(value));
+                router.push(`/explore?id=${session?.user.id}`);
               }}
-              className="w-full m-auto col-span-2 md:col-span-1"
+              key={i}
+              className="w-full m-auto col-span-2 md:col-span-1 cursor-pointer"
             >
               <MyCard data={value} />
-            </Link>
+            </div>
           ))}
       <p className="text-xl text-gray-300 font-bold">
         {!data.length && !searchData.isLoading && "No Result For This Search"}

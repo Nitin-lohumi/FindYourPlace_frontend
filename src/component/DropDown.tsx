@@ -7,9 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSession } from "next-auth/react";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { IoMenu } from "react-icons/io5";
+import Link from "next/link";
 export default function DropDown() {
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -26,20 +29,22 @@ export default function DropDown() {
         <DropdownMenuItem
           className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold `}
         >
-          Hotels Nearby
+          <Link href={"/#hotel"}>Hotel</Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <hr className="text-gray-700" />
         <DropdownMenuItem
           className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold `}
         >
-          Restaurants Nearby
+          <Link href={"/#shopping_mall"}>shopping mall</Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold`}
-        >
-          Other Menus
-        </DropdownMenuItem>
+        <hr className="text-gray-700" />
+        {session && (
+          <DropdownMenuItem
+            className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold`}
+          >
+            <Link href={"/profile"}>profile</Link>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
