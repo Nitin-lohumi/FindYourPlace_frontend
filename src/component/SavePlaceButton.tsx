@@ -14,7 +14,7 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
     queryKey: ["isSaved", userId, placeId],
     queryFn: async () => {
       const res = await axios.post(
-        "http://localhost:8000/save/check/isSaved",
+        "https://findyourplace-backend.onrender.com/save/check/isSaved",
         { userId, placeId },
         { withCredentials: true }
       );
@@ -28,7 +28,7 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
   const saveMutation = useMutation({
     mutationFn: async () =>
       axios.post(
-        "http://localhost:8000/save/data",
+        "https://findyourplace-backend.onrender.com/save/data",
         { SaveObject: placeData, userId },
         { withCredentials: true }
       ),
@@ -46,7 +46,7 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
     mutationFn: async () => {
       if (!placeId || !userId) throw new Error("Missing IDs");
       return axios.delete(
-        `http://localhost:8000/save/RemoveFromSave/${placeId}/${userId}`,
+        `https://findyourplace-backend.onrender.com/save/RemoveFromSave/${placeId}/${userId}`,
         { withCredentials: true }
       );
     },

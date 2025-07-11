@@ -12,8 +12,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 const fetch_SearchAPI = async (textQuery: string) => {
   const res = await axios.get(
-    `http://localhost:8000/api/searchBar?text=${textQuery}`,
-    { withCredentials: true }
+    `https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}`,
+    {
+      withCredentials: true,
+    }
   );
   return res.data.data;
 };

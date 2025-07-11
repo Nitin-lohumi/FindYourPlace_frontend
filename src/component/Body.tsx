@@ -15,7 +15,7 @@ const fetchTouristData = async (
   longitude: number
 ): Promise<any> => {
   const res = await axios.get(
-    `http://localhost:8000/api/searchNearBy?lat=${latitude}&long=${longitude}&type=tourist_attraction`,
+    `https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=tourist_attraction`,
     { withCredentials: true }
   );
   return res.data.data;
@@ -25,7 +25,7 @@ const fetchForHotel = async (
   longitude: number
 ): Promise<any> => {
   const res = await axios.get(
-    `http://localhost:8000/api/searchNearBy?lat=${latitude}&long=${longitude}&type=hotel`,
+    `https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=hotel`,
     { withCredentials: true }
   );
   return res.data.data;
@@ -35,7 +35,7 @@ const fetchShoppingData = async (
   longitude: number
 ): Promise<any> => {
   const res = await axios.get(
-    `http://localhost:8000/api/searchNearBy?lat=${latitude}&long=${longitude}&type=shopping_mall`,
+    `https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=shopping_mall`,
     { withCredentials: true }
   );
   return res.data.data;

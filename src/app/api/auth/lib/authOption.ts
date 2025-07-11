@@ -57,7 +57,7 @@ export const authOption: NextAuthOptions = {
       return session;
     },
     async redirect({ url, baseUrl }) {
-      return `http://localhost:3000/`;
+      return baseUrl;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
