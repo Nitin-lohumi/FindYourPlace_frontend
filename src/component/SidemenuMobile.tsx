@@ -16,7 +16,7 @@ function SidemenuMobile() {
         <DrawerTrigger asChild>
           <FaFilter className="shadow-max text-gray-950/100 z-0" size={40}/>
         </DrawerTrigger>
-        <DrawerContent className="p-1 w-[80%] max-w-sm overflow-y-scroll bg-blue-950/80">
+        <DrawerContent className="p-1 w-[80%] max-w-sm overflow-y-scroll md:bg-blue-950/80 backgroundColor">
           <DrawerHeader>
             <DrawerTitle>Filter's</DrawerTitle>
             <DrawerDescription></DrawerDescription>

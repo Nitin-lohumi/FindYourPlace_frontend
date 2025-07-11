@@ -27,22 +27,22 @@ export default function DropDown() {
       <DropdownMenuContent className="w-60 mt-2 mr-1 border-none shadow shadow-gray-700 backgroundColor ">
         <DropdownMenuSeparator color={"white"} />
         <DropdownMenuItem
-          className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold `}
+          className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold p-0 `}
         >
-          <Link href={"/#hotel"}>Hotel</Link>
+          <Link href={"/#hotel"} className="p-2 w-full">Hotel</Link>
         </DropdownMenuItem>
         <hr className="text-gray-700" />
         <DropdownMenuItem
-          className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold `}
+          className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold p-0`}
         >
-          <Link href={"/#shopping_mall"}>shopping mall</Link>
+          <Link href={"/#shopping_mall"} className="p-2 w-full">shopping mall</Link>
         </DropdownMenuItem>
         <hr className="text-gray-700" />
         {session && (
           <DropdownMenuItem
-            className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold`}
+            className={`cursor-pointer text-lg hover:bg-sky-700 text-gray-100 font-bold p-0`}
           >
-            <Link href={"/profile"}>profile</Link>
+            <Link href={"/profile"} className="border p-2 w-full">profile</Link>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

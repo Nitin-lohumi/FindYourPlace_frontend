@@ -140,7 +140,7 @@ function ScreenBody() {
           </motion.div>
         </motion.div>
         {/* *************************************************** */}
-        <motion.div className="mb-28" ref={ref2} id="hotel">
+        <motion.div className="mb-28 min-h-screen" ref={ref2} id="hotel">
           <motion.div>
             <motion.h1 className="text-white font-bold flex flex-row items-center gap-2 md:text-2xl pt-3 pb-3 ">
               <motion.span className="ml-5">Hotel's</motion.span>
@@ -188,10 +188,10 @@ function ScreenBody() {
           </motion.div>
         </motion.div>
         {/* ************************************************************* */}
-        <motion.div className="mb-28" ref={ref3} id="shopping_mall">
+        <motion.div className="mb-28 min-h-screen" ref={ref3} id="shopping_mall">
           <motion.div>
             <motion.h1 className="text-white font-bold flex flex-row items-center gap-2 md:text-2xl pt-3 pb-3 ">
-              <motion.span className="ml-5">Restourent</motion.span>
+              <motion.span className="ml-5">Shopping Mall</motion.span>
               <motion.span>
                 <MdOutlineTour />
               </motion.span>
