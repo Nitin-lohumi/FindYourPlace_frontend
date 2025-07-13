@@ -100,7 +100,11 @@ function ScreenBody() {
                 <MdOutlineTour />
               </motion.span>
             </motion.h1>
-            <motion.div className="grid md:grid-cols-2 m-auto w-[90%] gap-9 grid-cols-2 items-center place-items-center">
+            <motion.div
+              className={`grid md:grid-cols-2 m-auto w-[90%] gap-9 grid-cols-2 items-center place-items-center ${
+                tourist?.isLoading && "overflow-hidden"
+              }`}
+            >
               {tourist?.isLoading
                 ? [1, 2, 3, 4].map((v: number, i: number) => {
                     return (
@@ -148,7 +152,11 @@ function ScreenBody() {
                 <MdOutlineTour />
               </motion.span>
             </motion.h1>
-            <motion.div className="grid md:grid-cols-2 m-auto w-[90%] gap-3 grid-cols-2 items-center place-items-center">
+            <motion.div
+              className={`grid md:grid-cols-2 m-auto w-[90%] gap-3 grid-cols-2 items-center place-items-center ${
+                Hotel?.isLoading && "overflow-hidden"
+              }`}
+            >
               {Hotel?.isLoading
                 ? [1, 2, 3, 4].map((v: number, i: number) => {
                     return (
@@ -188,7 +196,11 @@ function ScreenBody() {
           </motion.div>
         </motion.div>
         {/* ************************************************************* */}
-        <motion.div className="mb-28 min-h-screen" ref={ref3} id="shopping_mall">
+        <motion.div
+          className="mb-28 min-h-screen"
+          ref={ref3}
+          id="shopping_mall"
+        >
           <motion.div>
             <motion.h1 className="text-white font-bold flex flex-row items-center gap-2 md:text-2xl pt-3 pb-3 ">
               <motion.span className="ml-5">Shopping Mall</motion.span>
@@ -196,7 +208,11 @@ function ScreenBody() {
                 <MdOutlineTour />
               </motion.span>
             </motion.h1>
-            <motion.div className="grid md:grid-cols-2 m-auto w-[90%] gap-3 grid-cols-2 items-center place-items-center">
+            <motion.div
+              className={`grid md:grid-cols-2 m-auto w-[90%] gap-3 grid-cols-2 items-center place-items-center ${
+                shopping?.isLoading && "overflow-hidden"
+              }`}
+            >
               {shopping?.isLoading
                 ? [1, 2, 3, 4].map((v: number, i: number) => {
                     return (

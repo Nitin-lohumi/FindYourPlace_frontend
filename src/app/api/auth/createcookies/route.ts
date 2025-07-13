@@ -3,11 +3,9 @@ import { authOption } from "../lib/authOption";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-
 export async function GET() {
   const cookieStore = await cookies();
   const existing = cookieStore.get("google_id_token");
-  console.log(existing);
   if (existing) {
     return NextResponse.json({ msg: "valid" }, { status: 200 });
   }
@@ -31,7 +29,7 @@ export async function GET() {
   response.cookies.set("google_id_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
     path: "/",
     maxAge: 60 * 60 * 24 * 15,
   });

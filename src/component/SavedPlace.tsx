@@ -13,9 +13,12 @@ function SavedPlace({ id }: { id: string }) {
   const query = useQuery({
     queryKey: ["savedPlaces", id],
     queryFn: () =>
-      axios.get(`https://findyourplace-backend.onrender.com/get/SaveData/${id}`, {
-        withCredentials: true,
-      }),
+      axios.get(
+        `https://findyourplace-backend.onrender.com/get/SaveData/${id}`,
+        {
+          withCredentials: true,
+        }
+      ),
     staleTime: 10 * 60 * 1000,
   });
   const savedData = query.data?.data?.data || [];
