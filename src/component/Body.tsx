@@ -10,6 +10,7 @@ import { useFetch } from "@/lib/fetchFunction";
 import SkeletonPlace from "./skeletons/SkeletonPlace";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import SetCookies from "./SetCookies";
 const fetchTouristData = async (
   latitude: number,
   longitude: number
@@ -30,6 +31,7 @@ const fetchForHotel = async (
   );
   return res.data.data;
 };
+
 const fetchShoppingData = async (
   latitude: number,
   longitude: number
@@ -40,6 +42,7 @@ const fetchShoppingData = async (
   );
   return res.data.data;
 };
+
 function ScreenBody() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -74,7 +77,14 @@ function ScreenBody() {
   });
   return (
     <>
-      <motion.div className="min-h-fit max-h-screen flex flex-col item-center">
+      <motion.div
+        className={`max-h-screen flex flex-col item-center ${
+          !tourist?.isFetching || shopping?.isFetching || !Hotel?.isFetching
+            ? "overflow-hidden h-screen"
+            : ""
+        }`}
+      >
+        <SetCookies />
         {/* ************************************* */}
         <motion.div className="">
           <motion.p
@@ -92,7 +102,11 @@ function ScreenBody() {
         </motion.div>
         {/* **********************************************/}
 
-        <motion.div className="mb-28 min-h-screen" ref={ref1} id="touristPLace">
+        <motion.div
+          className={`mb-28 min-h-screen ${tourist.error && "hidden"}`}
+          ref={ref1}
+          id="touristPLace"
+        >
           <motion.div>
             <motion.h1 className="text-white font-bold flex flex-row items-center gap-2 md:text-2xl pt-3 pb-3 ">
               <motion.span className="ml-5">Tourist Places</motion.span>
@@ -101,9 +115,7 @@ function ScreenBody() {
               </motion.span>
             </motion.h1>
             <motion.div
-              className={`grid md:grid-cols-2 m-auto w-[90%] gap-9 grid-cols-2 items-center place-items-center ${
-                tourist?.isLoading && "overflow-hidden"
-              }`}
+              className={`grid md:grid-cols-2 m-auto w-[90%] gap-9 grid-cols-2 items-center place-items-center`}
             >
               {tourist?.isLoading
                 ? [1, 2, 3, 4].map((v: number, i: number) => {
@@ -144,7 +156,11 @@ function ScreenBody() {
           </motion.div>
         </motion.div>
         {/* *************************************************** */}
-        <motion.div className="mb-28 min-h-screen" ref={ref2} id="hotel">
+        <motion.div
+          className={`mb-28 min-h-screen ${Hotel.error && "hidden"}`}
+          ref={ref2}
+          id="hotel"
+        >
           <motion.div>
             <motion.h1 className="text-white font-bold flex flex-row items-center gap-2 md:text-2xl pt-3 pb-3 ">
               <motion.span className="ml-5">Hotel's</motion.span>
@@ -197,7 +213,7 @@ function ScreenBody() {
         </motion.div>
         {/* ************************************************************* */}
         <motion.div
-          className="mb-28 min-h-screen"
+          className={`mb-28 min-h-screen ${shopping.error && "hidden"}`}
           ref={ref3}
           id="shopping_mall"
         >
@@ -252,6 +268,38 @@ function ScreenBody() {
           </motion.div>
         </motion.div>
         {/* ******************************************************* */}
+
+        <motion.div className="h-screen justify-center items-center">
+          {tourist.error ? (
+            <>
+              <p className="text-white font-bold text-center mt-10 text-2xl">
+                NO Tourist Place in current locations
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+
+          {Hotel.error ? (
+            <>
+              <p className="text-white font-bold text-center mt-16 text-2xl">
+                NO Hotel in current locations
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+
+          {shopping.error ? (
+            <>
+              <p className="text-white font-bold text-center mt-20 text-2xl">
+                NO Shoping mall in current locations. Search your FAV Places
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+        </motion.div>
       </motion.div>
     </>
   );

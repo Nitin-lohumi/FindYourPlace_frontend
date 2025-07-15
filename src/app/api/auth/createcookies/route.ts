@@ -28,7 +28,7 @@ export async function GET() {
   const response = NextResponse.json({ message: "Cookie created" });
   response.cookies.set("google_id_token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "none",
     path: "/",
     maxAge: 60 * 60 * 24 * 15,
