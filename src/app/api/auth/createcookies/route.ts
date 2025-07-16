@@ -7,7 +7,10 @@ export async function GET() {
   const cookieStore = await cookies();
   const existing = cookieStore.get("google_id_token");
   if (existing) {
-    return NextResponse.json({ msg: "valid" }, { status: 200 });
+    return NextResponse.json(
+      { msg: "valid", token: existing.value },
+      { status: 200 }
+    );
   }
   const session = await getServerSession(authOption);
   if (!session || !session.idToken) {
@@ -25,7 +28,7 @@ export async function GET() {
       expiresIn: "15d",
     }
   );
-  const response = NextResponse.json({ message: "Cookie created" });
+  const response = NextResponse.json({ message: "Cookie created", token });
   response.cookies.set("google_id_token", token, {
     httpOnly: true,
     secure: true,

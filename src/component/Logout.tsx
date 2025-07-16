@@ -11,6 +11,9 @@ function Logout() {
       await axios
         .get("/api/auth/logout", { withCredentials: true })
         .then((v) => console.log(v));
+      localStorage.removeItem("cookie");
+      localStorage.removeItem("secure");
+      localStorage.removeItem("selectedPlace");
       await signOut({ callbackUrl: "/login" });
       toast.success("sucessFully LogOut");
     } catch (err) {

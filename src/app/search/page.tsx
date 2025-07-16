@@ -4,20 +4,33 @@ import { motion } from "framer-motion";
 import SkeletonPlace from "@/component/skeletons/SkeletonPlace";
 import { useSearchParams } from "next/navigation";
 import { useFetch } from "@/lib/fetchFunction";
-import { RootState } from "@/store/store";
+import { RootState, store } from "@/store/store";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import MyCard from "@/component/MyCard";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-const fetch_SearchAPI = async (textQuery: string) => {
-  const res = await axios.get(
-    `https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}`,
-    {
-      withCredentials: true,
+import { PuffLoader } from "react-spinners";
+const fetch_SearchAPI = async (textQuery: string, Token: string) => {
+  try {
+    const res = await axios.get(
+      // https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}
+      `http://localhost:8000/protected`,
+      {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${Token}` },
+      }
+    );
+    console.log(res.data);
+    if (res.status !== 200) {
+      console.error("Invalid response status:", res.status);
+      return [];
     }
-  );
-  return res.data.data;
+    return res.data?.data || [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 };
 
 type PlaceType = {
@@ -40,15 +53,24 @@ type PlaceType = {
 function Page() {
   const { data: session } = useSession();
   const router = useRouter();
+  const [tokenReady, setTokenReady] = useState(false);
   const { hasphnNo, selectedOptions, typeSelectOptions, openNowPlaces, sort } =
     useSelector((state: RootState) => state.Filters);
   const [data, setData] = useState<PlaceType[]>([]);
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("cookie");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+    setTokenReady(true);
+  }, []);
   const searchtext = useSearchParams();
   const textQuery = searchtext.get("text");
   const searchData = useFetch({
-    key: ["searchData", textQuery ?? ""],
-    fn: () => fetch_SearchAPI(textQuery || ""),
-    enable: String(textQuery).length > 0,
+    key: ["searchData", textQuery!],
+    fn: () => fetch_SearchAPI(textQuery || "", token || ""),
+    enable: String(textQuery).length > 3 && tokenReady,
   });
 
   useEffect(() => {
@@ -103,6 +125,14 @@ function Page() {
     hasphnNo,
     sort,
   ]);
+
+  if (!tokenReady) {
+    return (
+      <div className="text-white text-xl flex justify-center mt-10 items-center">
+        <PuffLoader color="white" size={50} data-testid="loader" />
+      </div>
+    );
+  }
 
   return (
     <div className="md:grid md:grid-cols-2 gap-3 p-5 flex flex-col overflow-y-auto">
