@@ -20,7 +20,7 @@ const fetchData = async (
   try {
     const res = await axios.get(
       // https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=${type}
-      `http://localhost:8000/protected`,
+      `https://findyourplace-backend.onrender.com/protected`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -25,7 +25,7 @@ function SavedPlace({ id }: { id: string }) {
     queryFn: () =>
       axios.get(
         // `https://findyourplace-backend.onrender.com/get/SaveData/${id}`,
-        `http://localhost:8000/protected`,
+        `https://findyourplace-backend.onrender.com/protected`,
         {
           withCredentials: true,
           headers: {

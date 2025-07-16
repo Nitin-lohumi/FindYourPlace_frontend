@@ -15,7 +15,7 @@ const fetch_SearchAPI = async (textQuery: string, Token: string) => {
   try {
     const res = await axios.get(
       // https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}
-      `http://localhost:8000/protected`,
+      `https://findyourplace-backend.onrender.com/protected`,
       {
         withCredentials: true,
         headers: { Authorization: `Bearer ${Token}` },
