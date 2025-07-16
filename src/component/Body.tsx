@@ -83,15 +83,6 @@ function ScreenBody() {
       </div>
     );
   }
-
-  if (!token) {
-    return (
-      <div className="text-white text-xl text-center mt-10">
-        No valid Access found. Please login again.
-      </div>
-    );
-  }
-
   const renderPlaces = (data: any[], isLoading: boolean) =>
     isLoading
       ? [1, 2, 3, 4].map((_, i) => (
