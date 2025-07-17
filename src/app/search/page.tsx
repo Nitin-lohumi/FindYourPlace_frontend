@@ -20,7 +20,6 @@ const fetch_SearchAPI = async (textQuery: string, Token: string) => {
         headers: { Authorization: `Bearer ${Token}` },
       }
     );
-    console.log(res.data);
     if (res.status !== 200) {
       console.error("Invalid response status:", res.status);
       return [];
@@ -60,7 +59,7 @@ function Page() {
   const textQuery = searchtext.get("text");
   const searchData = useFetch({
     key: ["searchData", textQuery!],
-    fn: () => fetch_SearchAPI(textQuery || "", token || ""),
+    fn: () => fetch_SearchAPI(textQuery || "", token!),
     enable: String(textQuery).length > 3,
   });
 
