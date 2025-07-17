@@ -146,7 +146,7 @@ function Page() {
               <MyCard data={value} />
             </div>
           ))}
-      <p className="text-xl text-gray-300 font-bold">
+      <p className="text-xl text-gray-300 font-bold text-center mt-10">
         {!data.length && !searchData.isLoading && "No Result For This Search"}
       </p>
     </div>
