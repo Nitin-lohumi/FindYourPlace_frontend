@@ -8,24 +8,17 @@ import { useSession } from "next-auth/react";
 import MyCard from "./MyCard";
 import { useRouter } from "next/navigation";
 import { PuffLoader } from "react-spinners";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 function SavedPlace({ id }: { id: string }) {
   const { data: session } = useSession();
-  const [token, setToken] = useState<string | null>(null);
-  const [tokenReady, setTokenReady] = useState(false);
+  const token = useSelector((state: RootState) => state.token.token);
   const router = useRouter();
-  useEffect(() => {
-    const Token = localStorage.getItem("cookie");
-    if (Token) {
-      setToken(Token);
-    }
-    setTokenReady(true);
-  }, []);
   const query = useQuery({
     queryKey: ["savedPlaces", id],
     queryFn: () =>
       axios.get(
-        // `https://findyourplace-backend.onrender.com/get/SaveData/${id}`,
-        `https://findyourplace-backend.onrender.com/protected`,
+        `https://findyourplace-backend.onrender.com/get/SaveData/${id}`,
         {
           withCredentials: true,
           headers: {
@@ -38,13 +31,6 @@ function SavedPlace({ id }: { id: string }) {
   const savedData = query.data?.data?.data || [];
   if (query.data?.data.message) {
     return <p className="text-center italic pt-6">{query.data.data.message}</p>;
-  }
-  if (!tokenReady) {
-    return (
-      <div className="text-white text-xl flex justify-center items-center md:h-[calc(100vh-66px)]">
-        <PuffLoader color="gray" size={60} />
-      </div>
-    );
   }
   return (
     <motion.div

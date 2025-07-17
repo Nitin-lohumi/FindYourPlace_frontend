@@ -10,7 +10,7 @@ import MyCard from "./MyCard";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { MdOutlineTour } from "react-icons/md";
-import { PuffLoader } from "react-spinners";
+import { RootState } from "@/store/store";
 const fetchData = async (
   latitude: number,
   longitude: number,
@@ -19,8 +19,7 @@ const fetchData = async (
 ): Promise<any[]> => {
   try {
     const res = await axios.get(
-      // https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=${type}
-      `https://findyourplace-backend.onrender.com/protected`,
+      `https://findyourplace-backend.onrender.com/api/searchNearBy?lat=${latitude}&long=${longitude}&type=${type}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +27,6 @@ const fetchData = async (
         withCredentials: true,
       }
     );
-    console.log(res.data);
     if (res.status !== 200) {
       console.error("Invalid response status:", res.status);
       return [];
@@ -41,48 +39,31 @@ const fetchData = async (
 };
 
 function ScreenBody() {
-  const [token, setToken] = useState<string | null>(null);
-  const [tokenReady, setTokenReady] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
-  useEffect(() => {
-    const storedToken = localStorage.getItem("cookie");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    setTokenReady(true);
-  }, []);
-
   const { latitude, longitude } = useSelector((state: any) => state.location);
   const { ref: ref1, inView: view1 } = useInView();
   const { ref: ref2, inView: view2 } = useInView();
   const { ref: ref3, inView: view3 } = useInView();
-
+  const token = useSelector((state: RootState) => state.token.token);
   const tourist = useFetch({
     key: ["touristPlaces", token!],
     fn: () => fetchData(latitude, longitude, token!, "tourist_attraction"),
-    enable: tokenReady && !!token && !!latitude && !!longitude && view1,
+    enable: !!token && !!latitude && !!longitude && view1,
   });
 
   const hotel = useFetch({
     key: ["hotels", token!],
     fn: () => fetchData(latitude, longitude, token!, "hotel"),
-    enable: tokenReady && !!token && !!latitude && !!longitude && view2,
+    enable: !!token && !!latitude && !!longitude && view2,
   });
 
   const shopping = useFetch({
     key: ["shopping", token!],
     fn: () => fetchData(latitude, longitude, token!, "shopping_mall"),
-    enable: tokenReady && !!token && !!latitude && !!longitude && view3,
+    enable: !!token && !!latitude && !!longitude && view3,
   });
-
-  if (!tokenReady) {
-    return (
-      <div className="text-white text-xl flex justify-center items-center md:h-[calc(100vh-66px)]">
-        <PuffLoader color="gray" size={60} />
-      </div>
-    );
-  }
+  // <PuffLoader color="gray" size={60} />
   const renderPlaces = (data: any[], isLoading: boolean) =>
     isLoading
       ? [1, 2, 3, 4].map((_, i) => (

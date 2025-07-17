@@ -5,18 +5,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 function SavePlaceButton({ placeData }: { placeData: any }) {
   const search = useSearchParams();
   const queryClient = useQueryClient();
   const userId = search.get("id");
   const placeId = placeData?.id;
+  const token = useSelector((state: RootState) => state.token.token);
   const isSavedQuery = useQuery({
     queryKey: ["isSaved", userId, placeId],
     queryFn: async () => {
       const res = await axios.post(
         "https://findyourplace-backend.onrender.com/save/check/isSaved",
         { userId, placeId },
-        { withCredentials: true }
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
 
       return res.data?.Save ?? false;
@@ -30,7 +33,7 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
       axios.post(
         "https://findyourplace-backend.onrender.com/save/data",
         { SaveObject: placeData, userId },
-        { withCredentials: true }
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedPlaces", userId] });
@@ -47,7 +50,12 @@ function SavePlaceButton({ placeData }: { placeData: any }) {
       if (!placeId || !userId) throw new Error("Missing IDs");
       return axios.delete(
         `https://findyourplace-backend.onrender.com/save/RemoveFromSave/${placeId}/${userId}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
     },
     onSuccess: () => {

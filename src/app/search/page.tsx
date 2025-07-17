@@ -14,8 +14,7 @@ import { PuffLoader } from "react-spinners";
 const fetch_SearchAPI = async (textQuery: string, Token: string) => {
   try {
     const res = await axios.get(
-      // https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}
-      `https://findyourplace-backend.onrender.com/protected`,
+      `https://findyourplace-backend.onrender.com/api/searchBar?text=${textQuery}`,
       {
         withCredentials: true,
         headers: { Authorization: `Bearer ${Token}` },
@@ -53,24 +52,16 @@ type PlaceType = {
 function Page() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [tokenReady, setTokenReady] = useState(false);
   const { hasphnNo, selectedOptions, typeSelectOptions, openNowPlaces, sort } =
     useSelector((state: RootState) => state.Filters);
   const [data, setData] = useState<PlaceType[]>([]);
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    const storedToken = localStorage.getItem("cookie");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    setTokenReady(true);
-  }, []);
+  const token = useSelector((state: RootState) => state.token.token);
   const searchtext = useSearchParams();
   const textQuery = searchtext.get("text");
   const searchData = useFetch({
     key: ["searchData", textQuery!],
     fn: () => fetch_SearchAPI(textQuery || "", token || ""),
-    enable: String(textQuery).length > 3 && tokenReady,
+    enable: String(textQuery).length > 3,
   });
 
   useEffect(() => {
@@ -125,15 +116,6 @@ function Page() {
     hasphnNo,
     sort,
   ]);
-
-  if (!tokenReady) {
-    return (
-      <div className="text-white text-xl flex justify-center mt-10 items-center">
-        <PuffLoader color="white" size={50} data-testid="loader" />
-      </div>
-    );
-  }
-
   return (
     <div className="md:grid md:grid-cols-2 gap-3 p-5 flex flex-col overflow-y-auto">
       {searchData.isLoading
