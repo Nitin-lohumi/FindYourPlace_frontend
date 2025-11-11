@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-900 to-indigo-950">
+    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-900/65 to-indigo-950/50">
       <div className="bg-blue-950/90 p-8 rounded-2xl shadow-lg text-center max-w-sm w-full">
         <h1 className="text-2xl font-semibold text-gray-300 mb-6">
           Welcome 👋
